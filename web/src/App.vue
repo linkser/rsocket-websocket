@@ -1,17 +1,18 @@
 <template>
   <main>
-    <input v-model="serverUrl">
+    serverUrl: <input v-model="serverUrl">
     <br>
-    <button @click="sendMessage(sendLength)">发送信息</button>
+    <button style="margin-right: 20px" @click="initRequest">start</button>
+    <button @click="closeConn">stop</button>
+    <br>    <br>
+    <button style="margin-right: 20px" @click="sendMessage(sendLength)">send</button>
     <input v-model="sendLength">
     <br>    <br>
-    <button @click="sendMessage(5)">发送小信息</button>
+    <!-- <button @click="sendMessage(5)">发送小信息</button>
     <br>    <br>
     <button @click="sendMessage(32761)">发送大信息</button>
     <br>    <br>
-    <button @click="initRequest">开启连接</button>
-    <br>    <br>
-    <button @click="closeConn">关闭连接</button>
+    -->
   </main>
 </template>
 <script setup>
