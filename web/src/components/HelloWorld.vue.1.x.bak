@@ -1,0 +1,128 @@
+<script setup>
+import {onMounted} from 'vue';
+import {WebsocketClientTransport} from 'rsocket-websocket-client';
+import {
+  RSocketConnector
+} from 'rsocket-core';
+import {
+  decodeCompositeMetadata,
+  decodeRoutes,
+  encodeCompositeMetadata,
+  encodeRoute,
+  WellKnownMimeType,
+} from "rsocket-composite-metadata";
+import {Buffer} from "buffer";
+
+defineProps({
+  msg: {
+    type: String,
+    required: true,
+  },
+})
+
+onMounted(() => {
+  console.log(222);
+  rSocket = initRequest();
+});
+
+let rSocket;
+
+async function initRequest() {
+  const transportOpts = {
+    url: 'ws:' + '127.0.0.1:6565',
+    debug: true
+  }
+
+  const setup = {
+    dataMimeType: WellKnownMimeType.APPLICATION_JSON.toString(),
+    keepAlive: 10000,
+    lifetime: 90000,
+    metadataMimeType: WellKnownMimeType.MESSAGE_RSOCKET_ROUTING.toString(),
+  }
+
+  const responder = {
+    requestResponse: function (payload, responderStream) {
+      console.log('get req from server:' + payload.data);
+      responderStream.onNext(
+          {
+            data: Buffer.from(new Array(10000).fill(0).toString()),
+          },
+          true
+      )
+      return {
+        cancel: () => {
+          console.log("cancelled");
+        },
+        onExtension: () => {
+          console.log("Received Extension request");
+        },
+      };
+    }
+  }
+
+  const serializers = {
+ //   data: JsonSerializer,
+ //   metadata: IdentitySerializer,
+  }
+
+  const errorHandler = (e) => {
+    console.log(e);
+  }
+
+  const transport = new WebsocketClientTransport(transportOpts);
+  const client = new RSocketConnector({transport: transport, setup: setup, responder: responder });
+  rSocket = await client.connect();
+  console.log('init client');
+  return rSocket;
+}
+let sendMessage = () => {
+  rSocket.requestResponse({
+    data: '111',
+    metadata: String.fromCharCode('hello'.length) + 'hello'
+  }).subscribe({
+    onComplete: (response) => {
+      console.log(response);
+    },
+    onError: (error) => {
+      console.log(error);
+    }
+  })
+}
+</script>
+
+<template>
+  <div class="greetings">
+    <h1 class="green">{{ msg }}</h1>
+    <button @click="sendMessage">发送</button>
+    <h3>
+      You’ve successfully created a project with
+      <a href="https://vite.dev/" target="_blank" rel="noopener">Vite</a> +
+      <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a>.
+    </h3>
+  </div>
+</template>
+
+<style scoped>
+h1 {
+  font-weight: 500;
+  font-size: 2.6rem;
+  position: relative;
+  top: -10px;
+}
+
+h3 {
+  font-size: 1.2rem;
+}
+
+.greetings h1,
+.greetings h3 {
+  text-align: center;
+}
+
+@media (min-width: 1024px) {
+  .greetings h1,
+  .greetings h3 {
+    text-align: left;
+  }
+}
+</style>

@@ -1,0 +1,52 @@
+import {onMounted} from 'vue';
+import RSocketWebSocketClient from 'rsocket-websocket-client';
+import {
+    RSocketClient,
+    IdentitySerializer,
+    JsonSerializer,
+    MESSAGE_RSOCKET_ROUTING, APPLICATION_JSON
+} from 'rsocket-core';
+import {Single} from "rsocket-flowable";
+
+const transportOpts = {
+    url: 'ws:' + '127.0.0.1:6565',
+    debug: true,
+    lengthPrefixedFrames: false
+}
+
+const setup = {
+    dataMimeType: APPLICATION_JSON.string,
+    keepAlive: 10000,
+    lifetime: 90000,
+    metadataMimeType: MESSAGE_RSOCKET_ROUTING.string,
+}
+
+const responder = {
+    requestResponse: function (request) {
+        console.log('get req from server');
+        return new Single((subscriber) => {
+            subscriber.onSubscribe(() => {});
+            // response something large size
+            subscriber.onComplete({
+                data: {
+                    "data": new Array(40000).fill(0),
+                }
+            })
+        })
+    }
+}
+
+const serializers = {
+    data: JsonSerializer,
+    metadata: IdentitySerializer,
+}
+
+const errorHandler = (e) => {
+    console.log(e);
+}
+
+const transport = new (await RSocketWebSocketClient.default)(transportOpts);
+const client = new RSocketClient({setup, transport, responder, serializers, errorHandler});
+var rSocket = await client.connect();
+console.log('init client');
+Promise.resolve( new Promise(function () {})).then(() => {})

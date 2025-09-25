@@ -1,0 +1,28 @@
+{
+  "name": "web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "client": "node src/rsocket-client.js",
+    "server": "node src/rsocket-server.js"
+  },
+  "dependencies": {
+    "buffer": "^6.0.3",
+    "rsocket-core": "0.0.29-alpha.0",
+    "rsocket-flowable": "0.0.29-alpha.0",
+    "rsocket-websocket-client": "0.0.29-alpha.0",
+    "rsocket-websocket-server": "0.0.29-alpha.0",
+    "vue": "^3.5.13",
+    "ws": "^8.18.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.3",
+    "vite": "^6.2.4",
+    "vite-plugin-require-transform": "^1.0.21",
+    "vite-plugin-vue-devtools": "^7.7.2"
+  }
+}
