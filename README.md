@@ -5,11 +5,14 @@ run spring-boot application DemoApplication
 start client
 
 cd web
+
 npm install
+
 npm run dev
 
 
 visit [http://localhost:5173](http://localhost:5173/) on chrome 
+
 click send button
 
 you will find error on the server side,such as
