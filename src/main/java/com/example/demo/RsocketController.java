@@ -26,6 +26,6 @@ public class RsocketController {
     @MessageMapping("hello")
     public String hello(String mess) {
         System.out.println(mess.length());
-        return "{\"de\": 33}";
+        return "{\"length\": " + mess.length() +"}";
     }
 }
