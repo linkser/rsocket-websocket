@@ -9,12 +9,12 @@ npm install
 npm run dev
 
 
-visit [http://](http://localhost:5173/) on chrome 
+visit [http://localhost:5173](http://localhost:5173/) on chrome 
 click send button
 
 you will find error on the server side,such as
 
-`java`
+
 2025-09-26T00:15:21.955+08:00 ERROR 40172 --- [demo] [ctor-http-nio-2] io.rsocket.core.RSocketRequester         : Unexpected error during frame handling
 
 java.lang.IllegalStateException: Client received message for non-existent stream: 808202284, frame type: METADATA_PUSH
@@ -59,3 +59,5 @@ java.lang.IllegalStateException: Client received message for non-existent stream
 	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.119.Final.jar:4.1.119.Final]
 	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.119.Final.jar:4.1.119.Final]
 	at java.base/java.lang.Thread.run(Thread.java:842) ~[na:na]
+
+and the example works fine on firefox
